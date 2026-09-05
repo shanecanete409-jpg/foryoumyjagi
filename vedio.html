@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video</title>
+
+  <style>
+
+    /* ==============================
+       BODY
+    ============================== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #ffb6e6, #ff7adf);
+      overflow-x: hidden;
+    }
+
+    /* ==============================
+       HEADER
+    ============================== */
+    header {
+      text-align: center;
+      padding: 22px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      color: white;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    /* ==============================
+       VIDEO GALLERY
+    ============================== */
+    .video-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      padding: 30px;
+    }
+
+    /* ==============================
+       VIDEO CARD
+    ============================== */
+    .video-card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 25px;
+      padding: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: 0.3s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+
+    /* ==============================
+       VIDEO STYLE
+    ============================== */
+    video {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 4px solid rgba(255,255,255,0.7);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+
+    /* ==============================
+       VIDEO TITLE
+    ============================== */
+    .caption {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #444;
+    }
+
+    /* ==============================
+       MOBILE VERSION
+    ============================== */
+    @media (max-width: 600px) {
+
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      .video-gallery {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 18px;
+      }
+
+      .video-card {
+        padding: 12px;
+        border-radius: 20px;
+      }
+
+      video {
+        height: 300px;
+        border-radius: 15px;
+      }
+
+      .caption {
+        font-size: 0.9rem;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1> Video Gallery </h1>
+  </header>
+
+  <!-- VIDEO GALLERY -->
+  <div class="video-gallery">
+
+    <!-- VIDEO 1 -->
+    <div class="video-card">
+      <video controls autoplay muted loop>
+        <source src="m1.mp4" type="video/mp4">
+      </video>
+
+      <div class="caption">
+        My Favorite Memory
+      </div>
+    </div>
+
+    <!-- VIDEO 2 -->
+    <div class="video-card">
+      <video controls muted>
+        <source src="m2.mp4" type="video/mp4">
+      </video>
+
+      <div class="caption">
+        random
+      </div>
+    </div>
+
+    <!-- VIDEO 3 -->
+    <div class="video-card">
+      <video controls muted>
+        <source src="m3.mp4" type="video/mp4">
+      </video>
+
+      <div class="caption">
+        Always You mi amor
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
