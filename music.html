@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>music</title>
+
+    <style>
+
+        
+        :root {
+            --spotify: #1DB954;
+            --spotify-dark: #0b7a38;
+            --glass: rgba(18, 18, 18, 0.72);
+            --glass-light: rgba(255, 255, 255, 0.10);
+            --text: #ffffff;
+            --muted: #b3b3b3;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(29,185,84,0.22), transparent 32%),
+                radial-gradient(circle at 80% 80%, rgba(29,185,84,0.16), transparent 30%),
+                linear-gradient(135deg, #07150d, #101010 48%, #052a15);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .player {
+            width: 350px;
+            max-width: 100%;
+            background: var(--glass);
+            padding: 25px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.16);
+            box-shadow:
+                0 25px 60px rgba(0,0,0,0.55),
+                inset 0 1px 0 rgba(255,255,255,0.12);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            text-align: center;
+        }
+
+        /* COVER PHOTO */
+        .cover {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow:
+                0 18px 35px rgba(0,0,0,0.45),
+                0 0 35px rgba(29,185,84,0.12);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .song-title {
+            margin: 15px 0;
+        }
+
+        .song-title h2 {
+            margin-bottom: 5px;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .song-title p {
+            color: var(--muted);
+            margin-top: 0;
+            font-size: 14px;
+        }
+
+        .buttons {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 4px;
+        }
+
+        button {
+            padding: 10px 11px;
+            margin: 3px;
+            flex: 1 1 0;
+            min-width: 0;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-weight: 600;
+            transition: 0.2s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        button:hover {
+            background: var(--spotify);
+            color: #061b0d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(29,185,84,0.25);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--spotify);
+            cursor: pointer;
+        }
+
+        .volume {
+            margin-top: 15px;
+            color: var(--muted);
+        }
+
+        .lyrics {
+            margin-top: 15px;
+            height: 200px;
+            overflow-y: auto;
+            background: var(--glass-light);
+            border: 1px solid rgba(255,255,255,0.10);
+            padding: 15px;
+            border-radius: 16px;
+            line-height: 2;
+            text-align: center;
+            white-space: pre-line;
+            color: #e8e8e8;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            scrollbar-width: thin;
+            scrollbar-color: var(--spotify) transparent;
+        }
+
+        .lyrics::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .lyrics::-webkit-scrollbar-thumb {
+            background: var(--spotify);
+            border-radius: 10px;
+        }
+
+        h3 {
+            color: var(--spotify);
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding: 12px;
+            }
+
+            .player {
+                width: 100%;
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .cover {
+                width: min(250px, 78vw);
+                height: min(250px, 78vw);
+            }
+
+            .song-title h2 {
+                font-size: 21px;
+            }
+
+            .buttons {
+                gap: 2px;
+            }
+
+            .buttons button {
+                padding: 9px 5px;
+                margin: 2px;
+                font-size: 11px;
+                white-space: nowrap;
+            }
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="player">
+
+    <img
+        id="cover"
+        class="cover"
+        src="aboutyou.jpg"
+        alt="Album Cover"
+    >
+
+
+    <!-- SONG INFORMATION -->
+
+    <div class="song-title">
+
+        <h2 id="title">
+            Song 1
+        </h2>
+
+        <p id="artist">
+            Artist
+        </p>
+
+    </div>
+
+
+    <!-- MUSIC -->
+
+    <audio id="music"></audio>
+
+
+    <!-- PROGRESS BAR -->
+
+    <input
+        type="range"
+        id="progress"
+        value="0"
+        min="0"
+        max="100"
+    >
+
+
+    <!-- CONTROLS -->
+
+    <div class="buttons">
+
+        <button onclick="previousSong()">
+            ⏮ Previous
+        </button>
+
+        <button onclick="playPause()">
+            ▶ Play / ⏸ Pause
+        </button>
+
+        <button onclick="nextSong()">
+            Next ⏭
+        </button>
+
+    </div>
+
+
+    <!-- VOLUME -->
+
+    <div class="volume">
+
+        🔊 Volume
+
+        <input
+            type="range"
+            id="volume"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.8"
+        >
+
+    </div>
+
+
+    <!-- LYRICS -->
+
+    <h3>
+        🎤 Lyrics
+    </h3>
+
+
+    <div
+        class="lyrics"
+        id="lyrics"
+    >
+
+        Lyrics will appear here.
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    const music =
+        document.getElementById("music");
+
+
+    const title =
+        document.getElementById("title");
+
+
+    const artist =
+        document.getElementById("artist");
+
+
+    const lyrics =
+        document.getElementById("lyrics");
+
+
+    const progress =
+        document.getElementById("progress");
+
+
+    const volume =
+        document.getElementById("volume");
+
+
+    const cover =
+        document.getElementById("cover");
+
+
+
+    // ================================
+    // SONG LIST
+    // ================================
+
+    const songs = [
+
+        {
+
+            title: "About You",
+
+            artist: "by 1975",
+
+            file: "the 1975 - About You (Official).mp3",
+
+            cover: "aboutyou.jpg",
+
+            lyrics: `
+I know a place
+It's somewhere I go when I need to remember your face
+We get married in our heads
+Something to do while we try to recall how we met
+
+Do you think I have forgotten?
+Do you think I have forgotten?
+Do you think I have forgotten about you?
+
+You and I
+Were alive
+With nothing to do I could lay and just look in your eyes
+Wait and pretend
+Hold on and hope that we'll find our way back in the end
+
+Do you think I have forgotten?
+Do you think I have forgotten?
+Do you think I have forgotten about you?
+Do you think I have forgotten?
+Do you think I have forgotten?
+Do you think I have forgotten about you?
+
+There was something about you that now I can't remember
+It's the same damn thing that made my heart surrender
+And I'll miss you on a train
+I'll miss you in the morning
+I never know what to think about, so think about you
+(I think about you)
+About you
+Do you think I have forgotten about you?
+About you
+About you
+Do you think I have forgotten about you?
+
+            `
+
+        },
+
+         {
+
+            title: "Nahanap kita",
+
+            artist: "amiel song",
+
+            file: "nahanapkita.mp3",
+
+            cover: "nahanapkita.jpg",
+
+            lyrics: `
+Sa dinami-rami ng mga tao
+Sa hinaba-haba ng panahon
+At sa nilawak-lawak ng mundo
+Nahanap kita
+Para bang pabor sa 'kin ang mundo
+Mula nang ika'y makapiling ko
+At sa tagal ng ating pagsasama
+Lumalalim pa'ng nadarama
+Kaya naman (kaya naman)
+Napapabalik-tanaw
+Sa dinami-rami ng mga tao
+Sa hinaba-haba ng panahon
+At sa nilawak-lawak ng mundo
+Nahanap kita
+Ooh... ooh
+Kung iisipin mo paano nagkatagpo
+Ga'no kaliit ang pagkakataong mangyari 'to
+Na ikaw ay aking makasalubong
+Makilala't mahalin nang buo
+Kaya naman napapabalik-tanaw
+Sa dinami-rami ng mga tao
+Sa hinaba-haba ng panahon
+At sa nilawak-lawak ng mundo
+Nahanap kita
+Sa dinami-rami ng mga tala
+Sa nilalim-lalim ng karagatan
+Sa tinagal-tagal ng paglalakbay
+Nahanap kita
+Oh... oh, oh
+Oh... oh, oh
+Oh... (nahanap kita)
+Oh, oh... (nahanap kita)
+Oh... (nahanap kita)
+Oh, oh
+Sa dinami-rami ng mga tao
+Sa hinaba-haba ng panahon
+At sa nilawak-lawak ng mundo
+Nahanap kita
+Sa dinami-rami ng habang buhay
+Sa dinami-rami ng hinaharap
+Sa dinami-rami ng pwedeng mangyari
+Ikaw lamang ang nag-iisa
+            `
+
+        },
+
+        {
+
+            title: "Here With Me",
+
+            artist: "d4vd",
+
+            file: "d4vd - here with Me.mp3",
+
+            cover: "here with me.png",
+
+            lyrics: `
+Watch the sunrise along the coast
+As we're both getting old
+I can't describe what I'm feeling
+And all I know is we're going home
+So, please don't let me go
+Don't let me go
+
+And if it's right, I don't care how long it takes
+As long as I'm with you, I've got a smile on my face
+Save your tears, it'll be okay
+All I know is you're here with me
+
+Ooh-ooh, oh, oh-oh
+Oh-oh-oh-oh-oh
+
+Watch the sunrise as we're getting old, oh-oh
+I can't describe, oh-oh
+I wish I could live through every memory again
+Just one more time before we float off in the wind
+And all the time we spent waiting for the light to take us in
+Have been the greatest moments of my life
+
+I don't care how long it takes
+As long as I'm with you, I've got a smile on my face
+Save your tears, it'll be okay
+You're here with me
+
+Ooh-ooh, oh, oh-oh
+Oh-oh-oh-oh-oh
+
+I can't describe, oh-oh
+
+            `
+
+        },
+
+        {
+
+            title: "Enchanted",
+
+            artist: "tylor",
+
+            file: "enchanted.mp3",
+
+            cover: "tylor.jpg",
+
+            lyrics: `
+There I was again tonight
+Forcing laughter, faking smiles
+Same old tired, lonely place
+Walls of insincerity, shifting eyes and vacancy
+Vanished when I saw your face
+All I can say is, it was enchanting to meet you
+Your eyes whispered, "Have we met?"
+'Cross the room your silhouette
+Starts to make its way to me
+The playful conversation starts
+Counter all your quick remarks
+Like passing notes in secrecy
+And it was enchanting to meet you
+All I can say is, I was enchanted to meet you
+This night is sparkling, don't you let it go
+I'm wonderstruck, blushing all the way home
+I'll spend forever wondering if you knew
+I was enchanted to meet you
+The lingering question kept me up
+2 AM, who do you love?
+I wonder 'til I'm wide awake
+And now I'm pacing back and forth
+Wishing you were at my door
+I'd open up and you would say, "Hey"
+It was enchanting to meet you
+All I know is, I was enchanted to meet you
+This night is sparkling, don't you let it go
+I'm wonderstruck, blushing all the way home
+I'll spend forever wondering if you knew
+That this night is flawless, don't you let it go
+I'm wonderstruck, dancing around all alone
+I'll spend forever wondering if you knew
+I was enchanted to meet you
+This is me praying that
+This was the very first page
+Not where the story line ends
+My thoughts will echo your name, until I see you again
+These are the words I held back, as I was leaving too soon
+I was enchanted to meet you
+Please don't be in love with someone else
+Please don't have somebody waiting on you
+Please don't be in love with someone else
+Please don't have somebody waiting on you
+This night is sparkling, don't you let it go
+I'm wonderstruck, blushing all the way home
+I'll spend forever wondering if you knew
+This night is flawless, don't you let it go
+I'm wonderstruck, dancing around all alone
+I'll spend forever wondering if you knew
+I was enchanted to meet you
+Please don't be in love with someone else
+Please don't have somebody waiting on you
+            `
+
+        },
+
+        {
+
+            title: "I WANNA BE YOURS",
+
+            artist: "Arctic Monkeys",
+
+            file: "iwannabeyours.mp3",
+
+            cover: "iwannabeyours.jpg",
+
+            lyrics: `
+I wanna be your vacuum cleaner
+Breathin' in your dust
+I wanna be your Ford Cortina
+I will never rust
+If you like your coffee hot
+Let me be your coffee pot
+You call the shots, babe
+I just wanna be yours
+Secrets I have held in my heart
+Are harder to hide than I thought
+Maybe I just wanna be yours
+I wanna be yours, I wanna be yours
+Wanna be yours
+Wanna be yours
+Wanna be yours
+Let me be your 'leccy meter
+And I'll never run out
+Let me be the portable heater
+That you'll get cold without
+I wanna be your setting lotion (wanna be)
+Hold your hair in deep devotion (how deep?)
+At least as deep as the Pacific Ocean
+I wanna be yours
+Secrets I have held in my heart
+Are harder to hide than I thought
+Maybe I just wanna be yours
+I wanna be yours, I wanna be yours
+Wanna be yours
+Wanna be yours
+Wanna be yours
+Wanna be yours
+Wanna be yours
+Wanna be yours
+Wanna be yours
+(Wanna be yours)
+I wanna be your vacuum cleaner (wanna be yours)
+Breathin' in your dust (wanna be yours)
+I wanna be your Ford Cortina (wanna be yours)
+I will never rust (wanna be yours)
+I just wanna be yours (wanna be yours)
+I just wanna be yours (wanna be yours)
+I just wanna be yours (wanna be yours)
+            `
+
+        },
+{
+
+            title: "HEAVEN BY YOUR SIDE",
+
+            artist: "A1",
+
+            file: "heaven.mp3",
+
+            cover: "heaven.jpg",
+
+            lyrics: `
+You and I cannot hide
+The love we feel inside
+The words we need to say
+I feel that I have always walked alone
+But now that you're here with me
+There'll always be a place that I can go
+And suddenly our destiny has started to unfold
+When you're next to me
+I can see the greatest story love has ever told
+Now my life is blessed with the love of an angel
+How can it be true
+Somebody to keep the dream alive
+The dream I found in you
+I always thought the love would be the strangest thing to me
+But when we touch, I realize
+That I found my place in Heaven by your side
+I could fly when you smile
+I'd walk a thousand miles
+To hear you call my name
+Now that I have finally found the one
+Who will be there for me eternally
+My everlasting sun
+Suddenly our destiny has started to unfold
+When you're next to me
+I can see the greatest story love has ever told
+Now my life is blessed with the love of an angel
+How can it be true
+Somebody to keep the dream alive
+The dream I found in you
+I always thought the love would be the strangest thing to me
+But when we touch, I realize
+That I found my place in Heaven by your side
+That I've found my place in Heaven by your side
+Heaven by your side
+Heaven by your side
+Heaven by your side
+And when you're next to me
+I can see the greatest story love has ever told
+Now my life is blessed with the love of an angel
+How can it be true
+Somebody to keep the dream alive
+The dream I found in you
+I always thought the love would be the strangest thing to me
+But when we touch, I realize
+That I found my place in Heaven by your side
+Now my life is blessed with the love of an angel (Heaven by your side)
+Somebody who keep the dream alive (the dream I found in you)
+I always thought that love would be the strangest thing to me
+But when we touch, I realize
+That I found my place in heaven by your side
+            `
+
+        },
+
+        {
+
+            title: "Through the Years",
+
+            artist: "Kenny Rogers",
+
+            file: "throughtheyears.mp3",
+
+            cover: "throughtheyears.jpg",
+
+            lyrics: `
+I can't remember when you weren't there
+When I didn't care for anyone but you
+I swear we've been through everything there is
+Can't imagine anything we've missed
+Can't imagine anything the two of us can't do
+Through the years
+You've never let me down
+You've turned my life around
+The sweetest days I've found
+I've found with you
+Through the years
+I've never been afraid
+I've loved the life we've made
+And I'm so glad I've stayed
+Right here with you
+Through the years
+I can't remember what I used to do
+Who I trusted whom, I listened to before
+I swear you've taught me everything I know
+Can't imagine needing someone so
+But through the years it seems to me
+I need you more and more
+Through the years
+Through all the good and bad
+I know how much we had
+I've always been so glad
+To be with you
+Through the years
+It's better everyday
+You've kissed my tears away
+As long as it's okay
+I'll stay with you
+Through the years
+Through the years
+When everything went wrong
+Together we were strong
+I know that I belonged
+Right here with you
+Through the years
+I never had a doubt
+We'd always work things out
+I've learned what love's about
+By loving you
+Through the years
+Through the years
+You've never let me down
+You've turned my life around
+The sweetest days I've found
+I've found with you
+Through the years
+It's better everyday
+You've kissed my tears away
+As long as it's okay
+I'll stay with you
+Through the years
+            `
+
+        },
+
+
+{
+
+            title: "With A Smile",
+
+            artist: "your fav song",
+
+            file: "withasmile.mp3",
+
+            cover: "withasmile.png",
+
+            lyrics: `
+Lift your head, baby don't be scared
+Of the things that could go wrong along the way
+You'll get by with a smile
+You can't win at everything but you can try
+Baby, you don't have to worry
+'Cause there ain't no need to hurry
+No one ever said that there's an easy way
+When they're closing all their doors
+They don't want you anymore
+This sounds funny but I'll say it anyway
+Girl, I'll stay through the bad times
+Even if I have to fetch you everyday
+We'll get by if you smile
+You can never be too happy in this life
+'Cause in a world where everybody
+Hates a happy ending story
+It's a wonder love can make the world go round
+But don't let it bring you down
+And turn your face into a frown
+You'll get along with a little prayer and a song
+Tidididi, tidididi, tidididi, didi, didi, dididi
+Let me hear you sing it
+Tidididi, tidididi, tidididi, didi, didi, dididi
+'Cause in a world where everybody
+Hates a happy ending story
+It's a wonder love can make the world go round
+But don't let it bring you down
+And turn your face into a frown
+You'll get along with a little prayer and a song
+Lift your head, baby don't be scared
+Of the things that could go wrong along the way
+You'll get by with a smile
+Now it's time to kiss away those tears goodbye
+Tidididi, tidididi, tidididi, didi, didi, dididi
+Let me hear you sing it
+Tidididi, tidididi, tidididi, didi, didi, dididi
+Tidididi, tidididi, tidididi, didi, didi, dididi
+Tidididi, tidididi, tidididi, didi, didi, dididi
+Tidididi, tidididi, tidididi, didi, didi, dididi
+With a smile
+            `
+
+        },
+
+
+
+
+
+        {
+
+            title: "Co-Pilot",
+
+            artist: "Another Artist",
+
+            file: "copilot.mp3",
+
+            cover: "copilotpic.jpg",
+
+            lyrics: `
+Ooh-whoa, yeah
+Pangakong 'di mag-iisa
+Kasama mo hanggang rurok
+Ipikit ang 'yong mga mata
+La-la-la-la-la, ngayong nandito ka
+Hindi inaasahang pangyayari ang nangyari
+Mga labi nagtagpo, punasan na ang mga luha
+Ako'ng maglalayo sa 'yo, whoa, whoa, whoa
+Hayaan mo na ilipad ka ng aking musika
+Oh-whoa-whoa-whoa, oh-whoa-whoa
+Palayo sa mundo mong walang alam kundi pahirapan ka
+Oh-whoa-whoa-whoa, oh-whoa-whoa
+Do you wanna fly?
+You could be my co-pilot
+Let me put you on this flight
+Make love in the sky or in another planet
+Do you wanna fly?
+You could be my co-pilot
+Let me put you on this flight
+Make love in the sky or in another planet
+Ready or not, we taking a trip
+Fuck it, no luggage vacation it is
+Ready to shop with money to blow?
+Spend it on outfits, the runway a show
+Fashionably late, so it's too early to tell
+Ask could this be fate, then I'm burnin' it in hell
+Not in heaven, this is penance, 'cause you're learning it in jail
+When the lesson is presented, Lord, have mercy if we fail
+We prevail through the yells, all them mood swings bring (oh)
+Make your mood ring bling the way your mood swings swing
+Hayaan mo na ilipad ka ng aking musika
+Oh-whoa-whoa-whoa, oh-whoa-whoa (oh)
+Palayo sa mundo mong walang alam kundi pahirapan ka
+Oh-whoa-whoa-whoa, oh-whoa-whoa
+Do you wanna fly? (Do you wanna fly?)
+You could be my co-pilot (you could be my co-pilot)
+Let me put you on this flight (let me put you on this flight)
+Make love in the sky or in another planet
+Do you wanna fly? (Do you wanna fly?)
+You could be my co-pilot (said, do you wanna fly?)
+Let me put you on this flight (let me put you in this flight, baby)
+Make love in the sky (make love) or in another planet (in another planet, girl)
+Oh-whoa-whoa-whoa (in another planet)
+Oh-whoa-whoa-whoa
+Whoa-whoa-whoa-whoa
+Whoa-whoa-whoa-whoa
+Let me take you high
+Up to the sights you haven't seen, yeah
+This is a reminder we won't need
+'Cause I live for this, lit chick
+All we need is me and you, chick
+I promise you, I'll be true, check
+Let me break it down, uh, I'ma take it down, uh
+I won't let you down, let the mood set
+Cool, let's groove to the tunes that we make
+While creatin' a violin of bodies it take
+What they want, what they need from it, don't get ya chest
+Take control as it please, I'ma give you the best
+Let me ease it, do not try to seize it
+I'ma please it 'til they screamin' Jesus' name
+Fire breathin', do not try to freeze it
+I'ma freak it 'til you feelin' like seasons change
+"He's insane, " that's what they say
+But I'm deranged, so hold it, hold it
+Yeezy taught me, so he's to blame
+While I am hit, own it, own it
+On it, 'til the break of dawn and to the morning
+Sun touches the asphalt
+Soaring, take hold of the moment, control it
+As I give you mine (mine, mine)
+            `
+
+        }
+
+
+
+    ];
+
+
+
+    let currentSong = 0;
+
+
+
+    // ================================
+    // LOAD SONG
+    // ================================
+
+    function loadSong(index) {
+
+
+        const song =
+            songs[index];
+
+
+        title.innerText =
+            song.title;
+
+
+        artist.innerText =
+            song.artist;
+
+
+        music.src =
+            song.file;
+
+
+        cover.src =
+            song.cover;
+
+
+        lyrics.innerText =
+            song.lyrics;
+
+
+        progress.value = 0;
+
+    }
+
+
+
+    // ================================
+    // PLAY / PAUSE
+    // ================================
+
+    function playPause() {
+
+
+        if (music.paused) {
+
+            music.play();
+
+        }
+
+        else {
+
+            music.pause();
+
+        }
+
+    }
+
+
+
+    // ================================
+    // NEXT SONG
+    // ================================
+
+    function nextSong() {
+
+
+        currentSong++;
+
+
+        if (
+            currentSong >=
+            songs.length
+        ) {
+
+            currentSong = 0;
+
+        }
+
+
+        loadSong(currentSong);
+
+
+        music.play();
+
+    }
+
+
+
+    // ================================
+    // PREVIOUS SONG
+    // ================================
+
+    function previousSong() {
+
+
+        currentSong--;
+
+
+        if (currentSong < 0) {
+
+            currentSong =
+                songs.length - 1;
+
+        }
+
+
+        loadSong(currentSong);
+
+
+        music.play();
+
+    }
+
+
+
+    // ================================
+    // AUTO NEXT
+    // ================================
+
+    music.addEventListener(
+        "ended",
+        function() {
+
+            nextSong();
+
+        }
+    );
+
+
+
+    // ================================
+    // PROGRESS BAR
+    // ================================
+
+    music.addEventListener(
+        "timeupdate",
+        function() {
+
+
+            if (music.duration) {
+
+
+                progress.value =
+
+                    (music.currentTime /
+                    music.duration) * 100;
+
+            }
+
+        }
+    );
+
+
+
+    // ================================
+    // CHANGE SONG POSITION
+    // ================================
+
+    progress.addEventListener(
+        "input",
+        function() {
+
+
+            if (music.duration) {
+
+
+                music.currentTime =
+
+                    (progress.value / 100) *
+                    music.duration;
+
+            }
+
+        }
+    );
+
+
+
+    // ================================
+    // VOLUME
+    // ================================
+
+    volume.addEventListener(
+        "input",
+        function() {
+
+            music.volume =
+                volume.value;
+
+        }
+    );
+
+
+
+    // ================================
+    // FIRST SONG
+    // ================================
+
+    loadSong(currentSong);
+
+
+    music.volume = 0.8;
+
+
+</script>
+
+
+</body>
+
+</html>
