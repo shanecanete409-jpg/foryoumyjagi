@@ -1,0 +1,650 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>390x844 Neon Flower</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background: #111;
+}
+
+/* =================================
+   EXACT iPHONE SIZE
+   390px × 844px
+================================= */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scene {
+    position: relative;
+
+    width: 390px;
+    height: 844px;
+
+    overflow: hidden;
+    background: #000;
+
+    flex-shrink: 0;
+}
+
+/* =================================
+   FLOWER
+================================= */
+
+.flower {
+    position: absolute;
+
+    width: 330px;
+    height: 700px;
+
+    left: 30px;
+    top: 45px;
+
+    animation: sway 5s ease-in-out infinite;
+    transform-origin: center bottom;
+}
+
+/* =================================
+   FLOWER HEAD
+================================= */
+
+.flower-head {
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    left: 15px;
+    top: 0;
+
+    z-index: 10;
+
+    filter:
+        drop-shadow(0 0 8px #ff1493)
+        drop-shadow(0 0 22px #ff1493)
+        drop-shadow(0 0 45px #ff1493);
+}
+
+/* =================================
+   PETALS
+================================= */
+
+.petal {
+    position: absolute;
+
+    width: 125px;
+    height: 175px;
+
+    left: 87px;
+    top: 45px;
+
+    border-radius: 65% 65% 45% 45%;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 80%,
+            #ffc4e9 0%,
+            #ff73c5 20%,
+            #ff1493 48%,
+            #a80060 75%,
+            #3b0023 100%
+        );
+
+    border: 2px solid #ff8bd0;
+
+    box-shadow:
+        inset 0 0 25px #ffb6e5,
+        0 0 10px #ff1493,
+        0 0 25px #ff1493,
+        0 0 50px #ff1493;
+
+    transform-origin: 62px 140px;
+
+    animation: petalGlow 2s ease-in-out infinite;
+}
+
+.petal.one {
+    transform: rotate(0deg);
+}
+
+.petal.two {
+    transform: rotate(72deg);
+}
+
+.petal.three {
+    transform: rotate(144deg);
+}
+
+.petal.four {
+    transform: rotate(216deg);
+}
+
+.petal.five {
+    transform: rotate(288deg);
+}
+
+/* Petal veins */
+
+.petal::after {
+    content: "";
+
+    position: absolute;
+
+    width: 2px;
+    height: 125px;
+
+    left: 61px;
+    top: 15px;
+
+    background: #ffbce8;
+
+    box-shadow:
+        0 0 5px white,
+        0 0 12px #ff1493;
+
+    opacity: .7;
+}
+
+/* =================================
+   FLOWER CENTER
+================================= */
+
+.center {
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    left: 115px;
+    top: 115px;
+
+    z-index: 20;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            white 0%,
+            #ffd9ef 15%,
+            #ff69b4 38%,
+            #ff1493 62%,
+            #70003e 100%
+        );
+
+    box-shadow:
+        0 0 10px white,
+        0 0 25px #ff69b4,
+        0 0 50px #ff1493,
+        0 0 90px #ff1493;
+
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* =================================
+   STAMENS
+================================= */
+
+.stamens {
+    position: absolute;
+
+    width: 200px;
+    height: 150px;
+
+    left: 50px;
+    top: 65px;
+
+    z-index: 15;
+}
+
+.stamen {
+    position: absolute;
+
+    width: 3px;
+    height: 75px;
+
+    left: 98px;
+    top: 45px;
+
+    background: white;
+
+    transform-origin: bottom;
+
+    box-shadow:
+        0 0 6px white,
+        0 0 15px #ff1493;
+}
+
+.stamen::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    left: -2.5px;
+    top: -4px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 8px white,
+        0 0 18px #ff1493;
+}
+
+.s1 { transform: rotate(-55deg); }
+.s2 { transform: rotate(-42deg); }
+.s3 { transform: rotate(-28deg); }
+.s4 { transform: rotate(-14deg); }
+.s5 { transform: rotate(0deg); }
+.s6 { transform: rotate(14deg); }
+.s7 { transform: rotate(28deg); }
+.s8 { transform: rotate(42deg); }
+.s9 { transform: rotate(55deg); }
+
+/* =================================
+   CONNECTED STEM
+================================= */
+
+.stem {
+    position: absolute;
+
+    width: 18px;
+    height: 385px;
+
+    left: 156px;
+    top: 220px;
+
+    z-index: 3;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #250019,
+            #d90078 25%,
+            #ff8bd0 50%,
+            #d90078 75%,
+            #250019
+        );
+
+    box-shadow:
+        0 0 8px #ff1493,
+        0 0 20px #ff1493,
+        0 0 40px #ff1493;
+
+    animation: stemGlow 2s ease-in-out infinite;
+}
+
+/* Direct flower connection */
+
+.stem::before {
+    content: "";
+
+    position: absolute;
+
+    width: 40px;
+    height: 60px;
+
+    left: -11px;
+    top: -25px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            #ffb6e5,
+            #ff1493 45%,
+            #790044 100%
+        );
+
+    box-shadow:
+        0 0 15px #ff1493,
+        0 0 35px #ff1493;
+}
+
+/* =================================
+   LEAVES
+================================= */
+
+.leaf {
+    position: absolute;
+
+    width: 120px;
+    height: 62px;
+
+    z-index: 5;
+
+    border-radius: 100% 0 100% 0;
+
+    background:
+        radial-gradient(
+            ellipse at 70% 40%,
+            #ff9bd6,
+            #ff1493 45%,
+            #650038 100%
+        );
+
+    border: 2px solid #ff69b4;
+
+    box-shadow:
+        0 0 10px #ff1493,
+        0 0 25px #ff1493,
+        inset 0 0 15px #ffb6e5;
+}
+
+/* Leaf vein */
+
+.leaf::after {
+    content: "";
+
+    position: absolute;
+
+    width: 95px;
+    height: 2px;
+
+    left: 15px;
+    top: 30px;
+
+    background: #ffcef0;
+
+    box-shadow: 0 0 8px #ff1493;
+
+    transform: rotate(-8deg);
+}
+
+/* Left leaf */
+
+.leaf.left {
+    left: 18px;
+    top: 390px;
+
+    transform: rotate(-25deg);
+
+    animation: leftLeaf 3s ease-in-out infinite;
+}
+
+/* Right leaf */
+
+.leaf.right {
+    right: 5px;
+    top: 335px;
+
+    transform:
+        scaleX(-1)
+        rotate(-25deg);
+
+    animation: rightLeaf 3s ease-in-out infinite;
+}
+
+/* =================================
+   GLOWING GROUND
+================================= */
+
+.ground {
+    position: absolute;
+
+    width: 250px;
+    height: 38px;
+
+    left: 70px;
+    bottom: 30px;
+
+    border-radius: 50%;
+
+    background: #ff1493;
+
+    filter: blur(18px);
+
+    opacity: .8;
+
+    box-shadow:
+        0 0 30px #ff1493,
+        0 0 70px #ff1493;
+
+    animation: groundPulse 2s ease-in-out infinite;
+}
+
+/* =================================
+   FLOATING PARTICLES
+================================= */
+
+.particle {
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    box-shadow:
+        0 0 8px white,
+        0 0 18px #ff1493,
+        0 0 30px #ff1493;
+
+    animation: float 4s ease-in-out infinite;
+}
+
+.particle:nth-child(1) {
+    left: 35px;
+    top: 170px;
+}
+
+.particle:nth-child(2) {
+    left: 340px;
+    top: 220px;
+    animation-delay: .8s;
+}
+
+.particle:nth-child(3) {
+    left: 55px;
+    top: 470px;
+    animation-delay: 1.5s;
+}
+
+.particle:nth-child(4) {
+    left: 325px;
+    top: 520px;
+    animation-delay: 2s;
+}
+
+.particle:nth-child(5) {
+    left: 195px;
+    top: 110px;
+    animation-delay: 2.5s;
+}
+
+.particle:nth-child(6) {
+    left: 85px;
+    top: 650px;
+    animation-delay: 1s;
+}
+
+.particle:nth-child(7) {
+    left: 290px;
+    top: 690px;
+    animation-delay: 2s;
+}
+
+/* =================================
+   ANIMATIONS
+================================= */
+
+@keyframes sway {
+    0%, 100% {
+        transform: rotate(-1.5deg);
+    }
+
+    50% {
+        transform: rotate(1.5deg);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+        filter: brightness(1.5);
+    }
+}
+
+@keyframes petalGlow {
+    0%, 100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.3);
+    }
+}
+
+@keyframes stemGlow {
+    0%, 100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.45);
+    }
+}
+
+@keyframes leftLeaf {
+    0%, 100% {
+        transform: rotate(-25deg);
+    }
+
+    50% {
+        transform: rotate(-33deg);
+    }
+}
+
+@keyframes rightLeaf {
+    0%, 100% {
+        transform:
+            scaleX(-1)
+            rotate(-25deg);
+    }
+
+    50% {
+        transform:
+            scaleX(-1)
+            rotate(-33deg);
+    }
+}
+
+@keyframes groundPulse {
+    0%, 100% {
+        transform: scaleX(1);
+        opacity: .5;
+    }
+
+    50% {
+        transform: scaleX(1.3);
+        opacity: 1;
+    }
+}
+
+@keyframes float {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-30px) scale(1.3);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(.5);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+
+    <div class="flower">
+
+        <!-- FLOWER HEAD -->
+        <div class="flower-head">
+
+            <div class="petal one"></div>
+            <div class="petal two"></div>
+            <div class="petal three"></div>
+            <div class="petal four"></div>
+            <div class="petal five"></div>
+
+            <!-- STAMENS -->
+            <div class="stamens">
+                <div class="stamen s1"></div>
+                <div class="stamen s2"></div>
+                <div class="stamen s3"></div>
+                <div class="stamen s4"></div>
+                <div class="stamen s5"></div>
+                <div class="stamen s6"></div>
+                <div class="stamen s7"></div>
+                <div class="stamen s8"></div>
+                <div class="stamen s9"></div>
+            </div>
+
+            <div class="center"></div>
+
+        </div>
+
+        <!-- CONNECTED STEM -->
+        <div class="stem"></div>
+
+        <!-- LEAVES -->
+        <div class="leaf left"></div>
+        <div class="leaf right"></div>
+
+    </div>
+
+    <!-- GLOW AT THE BOTTOM -->
+    <div class="ground"></div>
+
+    <!-- FLOATING PARTICLES -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+</div>
+
+</body>
+</html>
+```
