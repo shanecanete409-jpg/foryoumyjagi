@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JAGI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 10px;
+
+            background: #d9c3a5;
+
+            font-family: "Comic Sans MS", cursive;
+        }
+
+
+        /* =========================
+           NOTEBOOK
+        ========================= */
+
+        .notebook {
+            width: 100%;
+            max-width: 430px;
+
+            height: 90vh;
+            min-height: 600px;
+
+            background: #fffdf2;
+
+            border-left: 12px solid #8b5e3c;
+
+            border-radius: 12px;
+
+            position: relative;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            scroll-snap-type: y proximity;
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,0.25);
+        }
+
+
+        /* =========================
+           RINGS
+        ========================= */
+
+        .rings {
+            position: absolute;
+
+            left: -10px;
+            top: 25px;
+            bottom: 25px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-around;
+
+            z-index: 20;
+        }
+
+
+        .ring {
+            width: 23px;
+            height: 23px;
+
+            border: 4px solid #777;
+
+            border-radius: 50%;
+
+            background: #ddd;
+
+            box-shadow:
+                inset 2px 2px 3px #555;
+        }
+
+
+        /* =========================
+           BLANK PAGE
+        ========================= */
+
+        .page {
+            scroll-snap-align: start;
+            width: 100%;
+            height: 100%;
+
+            position: relative;
+
+            overflow: hidden;
+
+            background-color: #fffdf2;
+            background-image: none;
+
+            padding: 45px 35px 70px 50px;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+
+            animation: pageIn 0.35s ease;
+        }
+
+
+        /* =========================
+           COVER
+        ========================= */
+
+        .cover {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            flex-direction: column;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6c8ebf,
+                    #89a9d0
+                );
+
+            color: white;
+        }
+
+
+        .cover-icon {
+            font-size: 70px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .cover h1 {
+            font-size: 35px;
+
+            margin-bottom: 10px;
+
+            color: white;
+        }
+
+
+        .cover p {
+            font-size: 16px;
+
+            color: white;
+        }
+
+
+        /* =========================
+           TAPE
+        ========================= */
+
+        .tape {
+            position: absolute;
+
+            width: 90px;
+            height: 24px;
+
+            top: 20px;
+            right: 40px;
+
+            background:
+                rgba(255, 220, 130, 0.7);
+
+            transform: rotate(5deg);
+
+            z-index: 5;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .controls {
+            position: absolute;
+
+            bottom: 12px;
+
+            left: 0;
+            right: 0;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 10px;
+
+            z-index: 30;
+        }
+
+
+        button {
+            border: none;
+
+            padding: 10px 17px;
+
+            border-radius: 20px;
+
+            background: #5d7fa3;
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        button:hover {
+            background: #456887;
+
+            transform: translateY(-2px);
+        }
+
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+
+        button:disabled {
+            opacity: 0.35;
+
+            cursor: not-allowed;
+        }
+
+
+        #pageNumber {
+            font-size: 13px;
+
+            color: #555;
+        }
+
+
+        /* =========================
+           PAGE ANIMATION
+        ========================= */
+
+        @keyframes pageIn {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    rotateY(-8deg)
+                    translateX(15px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    rotateY(0)
+                    translateX(0);
+            }
+
+        }
+
+
+        /* =========================
+           SMALL PHONE
+        ========================= */
+
+        @media (max-width: 380px) {
+
+            body {
+                padding: 5px;
+            }
+
+
+            .notebook {
+                height: 94vh;
+
+                border-left-width: 9px;
+            }
+
+
+            .page::before {
+                left: 27px;
+            }
+
+
+            .cover h1 {
+                font-size: 30px;
+            }
+
+
+            .cover-icon {
+                font-size: 60px;
+            }
+
+
+            button {
+                padding: 9px 13px;
+
+                font-size: 12px;
+            }
+
+        }
+
+        #book {
+            width: 100%;
+            min-height: 100%;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NOTEBOOK
+    ========================= -->
+
+    <div class="notebook">
+
+
+        <!-- RINGS -->
+
+        <div class="rings">
+
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+
+        </div>
+
+
+        <!-- PAGE -->
+
+        <div id="book"></div>
+
+
+
+
+
+    </div>
+
+
+
+    <script>
+
+
+        /* =========================
+           PAGES
+        ========================= */
+
+        const pages = [
+
+            /* COVER */
+
+            `
+            <div class="cover">
+
+                <div class="cover-icon">
+                    
+                </div>
+
+                <h1>
+                    JAGI
+                </h1>
+
+                <p>
+                    THIS NOTEBOOK IS FOR YOU, MI AMOR
+                </p>
+
+            </div>
+            `,
+
+
+            /* BLANK PAGE 1 */
+
+            `
+            <div class="page">
+                     She was the first girl I ever had the courage to pursue.<br><br>
+
+I have always been a shy person, the kind who would rather keep my feelings hidden than risk being rejected. But when it came to her, I somehow found the courage to try. Even when, at the beginning, I already believed that there was no chance for me—because I knew that we were both girls.<br><br>
+
+And yet, I still chose to pursue her.<br><br>
+
+At that time, I was serving God. I was trying to devote my life to Him, trying to become closer to Him, and somehow, in the middle of all of that, He allowed our paths to cross.<br><br>
+
+Praise God, I met her.<br><br>
+
+She came into my life at a time when I was hurting. I was suffering, carrying wounds from my past relationship, and desperately trying to move on from someone I once loved. I thought I was only trying to survive that season of my life.<br><br>
+
+Then she came.<br><br>
+
+I don't know how to put into words what I feel for her. Maybe some feelings are simply too deep to be explained. All I know is that I admire her—more than I could ever say. There is something about her that feels almost ethereal, something so beautiful and gentle that whenever I look at her, I find myself wondering how someone like her could have found her way into my life.<br><br>
+
+But there is also a part of me that feels afraid.<br><br>
+
+Because while I was serving God, I fell in love with a girl.<br><br>
+
+Again.<br><br>
+
+And I couldn't help but wonder if I had done something wrong. I felt like I had committed a sin simply because my heart chose to love someone who was the same gender as me. I questioned myself. I questioned my faith. I questioned whether God would still understand me despite the feelings I couldn't control.<br><br>
+
+So I prayed.<br><br>
+
+Again and again, I begged God. I asked Him, with all the sincerity in my heart, to let me stay beside her. To let me experience what it feels like to be loved by her. To give me the chance to love again—this time, a love that felt so unexpected, yet so real.<br><br>
+
+I asked God to let me have her, even just for a little while.<br><br>
+
+And perhaps the hardest part is that I don't know whether this love is something I should hold onto or something I should surrender.<br><br>
+
+But one thing I know for certain is this:<br><br>
+
+I never expected to meet her.<br><br>
+
+I never expected to fall for her.<br><br>
+
+And I never expected that, while I was searching for God, I would also find someone who made my heart feel alive again.<br><br>
+
+Maybe she was not meant to stay forever.<br><br>
+
+Maybe she was.<br><br>
+
+I don't know.<br><br>
+
+All I know is that, in the middle of my brokenness, I met her—and for a while, she became a beautiful reason for me to believe that maybe my heart could learn how to love again.
+
+                <div class="tape">jagi</div>
+
+
+                Sometimes, whenever I look at her, I find myself wondering if she will still be beside me as I grow older, until I finally become successful in life and achieve the life I’ve always wanted.<br><br>
+
+She is also one of my dreams and one of the things I pray for. I have always wished, “I hope I can love someone of the same kind without having to think that this love is a sin against God.”<br><br>
+
+I want to love her without being afraid of God above. It is a wish that hurts so deeply in my heart, yet I cannot even explain where this pain comes from.<br><br>
+
+Sometimes, the thought crosses my mind that I would rather disappear from this world first than live without ever being with the person I love, and so that I would no longer have to feel like I am committing a sin.<br><br>
+
+It hurts me so much because I find myself in the darkness again, begging the Lord to take away the feelings of the person I love for me.<br><br>
+
+I cannot understand the pain and ache in my heart as I kneel and beg God. I don’t even know what I truly want to pray for anymore. Should I pray that I may be with her, or should I ask the Lord to take away the love she has for me because I am choosing God?<br><br>
+
+And that is what hurts the most—I feel like I am being forced to choose between the person I love and the God I never want to turn away from.
+
+
+Every time I look into her eyes, I find myself wishing I could pause time, because somewhere in the back of my mind is the fear that one day, we might have to let each other go.<br><br>
+
+Maybe someday, she won’t be beside me anymore. Maybe there will come a day when I can’t hold her hand, hear her voice, talk to her about the little things, or simply look at her and know that she’s there. And I think that’s what scares me the most—not losing her today, but knowing that someday, life might ask us to become strangers to a love that once meant everything.<br><br>
+
+It hurts to open my heart again. It hurts to take another chance, knowing that love doesn’t come with a promise that it will last forever. But despite all the fear, I still choose to take that chance.<br><br>
+
+Because if loving her means risking the possibility of someday losing her, then, for now, I’d rather be brave enough to love her than spend my life wondering what it would have felt like to be loved by her.<br><br>
+
+I don’t know what tomorrow holds.<br><br>
+
+I only know that right now, I want to cherish her, to know her love, and to experience every beautiful moment that comes with having her in my life.
+
+
+She is beautiful in a way that feels almost unreal—ethereal, like a piece of heaven that somehow found its way into this world. There’s something about her presence that I could never put into words. Whenever she’s beside me, everything feels softer, quieter, and somehow right. I don’t have to pretend or search for something to say; simply being near her feels like a kind of peace I never knew I was looking for.<br><br>
+
+And her beauty… God, I could spend forever trying to describe it and still fall short. She isn’t simply beautiful—she carries a kind of light within her, the kind that doesn’t ask to be noticed but somehow becomes impossible to ignore. Like a diamond beneath the sun, she catches every little bit of light and turns it into something brighter.<br><br>
+
+Sometimes I look at her and wonder how one person can hold so much beauty, warmth, and gentleness all at once. She has this quiet kind of magic about her—the kind you don’t understand, you simply feel.<br><br>
+
+And maybe that’s what makes her so beautiful to me:<br>
+she doesn’t just shine in my eyes—<br>
+she makes the whole world feel a little brighter when she’s around.
+<br>
+
+And If the day ever comes when she finds someone else to love, I hope he won’t be like me.<br>
+I hope he can give her the kind of love she has always wanted and deserved.<br>
+It hurts to think that maybe, with someone else, she’ll finally feel the love I wasn’t able to give her completely.<br><br>
+
+if the day comes when she finally forgets about me, I hope I can accept that,<br>
+even though my love wasn’t enough to make her stay.<br>
+I loved her the best way I knew.
+
+
+            </div>
+            `,
+
+
+           
+
+            
+
+
+            
+
+           
+
+
+           
+
+
+            
+
+        ];
+
+
+        /* =========================
+           CURRENT PAGE
+        ========================= */
+
+        let currentPage = 0;
+
+
+        /* =========================
+           SHOW PAGE
+        ========================= */
+
+        function renderBook() {
+            const book = document.getElementById("book");
+            book.innerHTML = pages.join("");
+
+            // Make each story section behave like a page while
+            // keeping everything in one continuous scroll.
+            Array.from(book.children).forEach((page, index) => {
+                page.dataset.page = index;
+            });
+        }
+
+        function scrollToPage(index) {
+            const book = document.getElementById("book");
+            const page = book.children[index];
+
+            if (page) {
+                page.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+        }
+
+
+        /* =========================
+           NEXT
+        ========================= */
+
+        function nextPage() {
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                scrollToPage(currentPage);
+            }
+        }
+
+
+        /* =========================
+           PREVIOUS
+        ========================= */
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                scrollToPage(currentPage);
+            }
+        }
+
+
+        /* =========================
+           KEYBOARD
+        ========================= */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "ArrowRight") {
+                    nextPage();
+                }
+
+                if (event.key === "ArrowLeft") {
+                    previousPage();
+                }
+
+            }
+        );
+
+
+        /* START */
+
+        renderBook();
+
+    </script>
+
+
+</body>
+
+</html>
